@@ -25,6 +25,7 @@ import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import jakarta.validation.Validation;
+import jakarta.validation.Validator;
 
 @EnableCaching
 @SpringBootApplication
@@ -48,7 +49,7 @@ public class BackEndApplication {
     }
 
 	@Bean
-	public jakarta.validation.Validator validator() {
+	public Validator validator() {
 		return Validation.buildDefaultValidatorFactory().getValidator();
 	}
     
