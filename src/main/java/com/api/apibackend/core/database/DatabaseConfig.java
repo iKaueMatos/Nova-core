@@ -21,7 +21,7 @@ public class DatabaseConfig {
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://127.0.0.1:3308/novasoftware");
+        dataSource.setUrl("jdbc:mysql://localhost:3308/novasoftware");
         dataSource.setUsername("root");
         dataSource.setPassword("Nova");
 
