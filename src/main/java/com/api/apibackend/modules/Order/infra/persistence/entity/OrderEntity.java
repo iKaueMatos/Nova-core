@@ -9,18 +9,13 @@
 package com.api.apibackend.modules.Order.infra.persistence.entity;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.context.annotation.Lazy;
 
 import com.api.apibackend.modules.Customer.Infra.persistence.entity.CustomerEntity;
 import com.api.apibackend.modules.OrderAddress.Infra.persistence.entity.OrderAddressEntity;
-import com.api.apibackend.modules.OrderItem.infra.persistence.entity.OrderItemEntity;
 import com.api.apibackend.modules.Product.Infra.persistence.entity.ProductEntity;
 import com.api.apibackend.modules.Transaction.infra.entity.TransactionEntity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -53,7 +48,7 @@ public class OrderEntity implements Serializable {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_numero_pedido")
+    @Column(name = "id_pedido")
     private Long numberOrder;
     
     /**
@@ -61,7 +56,7 @@ public class OrderEntity implements Serializable {
      */
     @ManyToOne
     @JsonBackReference
-    @JoinColumn(name = "idcliente", referencedColumnName = "idcliente")
+    @JoinColumn(name = "id_cliente", referencedColumnName = "id_cliente")
     private CustomerEntity client;
     
     /**
@@ -70,8 +65,8 @@ public class OrderEntity implements Serializable {
     @ManyToMany
     @JoinTable(
     name = "pedido_produto",
-    joinColumns = @JoinColumn(name = "idnumPed"),
-    inverseJoinColumns = @JoinColumn(name = "idproduto")
+    joinColumns = @JoinColumn(name = "id_num_ped"),
+    inverseJoinColumns = @JoinColumn(name = "id_produto")
     )
     @JsonBackReference
     private List<ProductEntity> products;
@@ -91,13 +86,13 @@ public class OrderEntity implements Serializable {
     /**
      * Data de pagamento do pedido.
      */
-    @Column(name = "dtpagamento")
+    @Column(name = "dt_pagamento")
     private Date datePayment;
 
     /**
      * Nome do cliente.
      */
-    @Column(name = "nmcliente")
+    @Column(name = "nm_cliente")
     private String customerName;
     
     /**
@@ -116,7 +111,7 @@ public class OrderEntity implements Serializable {
      * Entidade de transação associada ao pedido.
      */
     @ManyToOne
-    @JoinColumn(name = "idtransacao", referencedColumnName = "idtransacao")
+    @JoinColumn(name = "id_transacao", referencedColumnName = "id_transacao")
     private TransactionEntity transactionEntity;
 
     /**
@@ -124,49 +119,4 @@ public class OrderEntity implements Serializable {
      */
     @OneToOne(mappedBy = "orderEntity")
     private OrderAddressEntity orderAddressEntity;
-
-    /**
-     * Calcula o valor total do pedido.
-     * TODO - Refatorar e colocar regras de cálculo na DOMAIN.
-     * Deixando a entidade OrderEntity sem nenhuma responsabilidade do banco de dados propriamente!
-     */
-    public void calculateTotal() {
-        BigDecimal total = BigDecimal.ZERO;
-        for (ProductEntity product : products) {
-            BigDecimal valuePrice = product.getPriceEntity().getPrice();
-            if (valuePrice != null && valuePrice.compareTo(BigDecimal.ZERO) > 0) {
-                total = total.add(valuePrice);
-            }
-        }
-        setTotalValue(total.floatValue());
-    }
-    
-    /**
-     * Adiciona um produto ao pedido.
-     */
-    public void addProduct(ProductEntity product) {
-        if (product != null && !products.contains(product)) {
-            this.products.add(product);
-        }
-    }
-    
-    /**
-     * Define a lista de produtos associados ao pedido.
-     */
-    public void setProducts(List<OrderItemEntity> orderItems) {
-    this.products = orderItems.stream()
-            .map(OrderItemEntity::getProduct)
-            .collect(Collectors.toList());
-}
-
-    /**
-     * Limpa a lista de produtos do pedido.
-     */
-    public void clearProducts() {
-    products = new ArrayList<>();
-    }
-
-    public List<ProductEntity> getProducts() {
-        return Collections.unmodifiableList(products);
-    }
 }
