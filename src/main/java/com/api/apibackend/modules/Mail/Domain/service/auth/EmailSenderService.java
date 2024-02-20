@@ -10,7 +10,6 @@ package com.api.apibackend.modules.Mail.Domain.service.auth;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -19,9 +18,9 @@ import org.springframework.stereotype.Service;
 
 import com.api.apibackend.modules.Auth.Application.DTOs.response.ResponseMessageDTO;
 import com.api.apibackend.modules.Mail.Domain.service.repository.IEmailSenderResetPassword;
-import com.api.apibackend.shared.Container.providers.MailProvider.implemations.AccountCreationNotificationMailProvider;
-import com.api.apibackend.shared.Container.providers.MailProvider.implemations.ConfirmationMailProvider;
-import com.api.apibackend.shared.Container.providers.MailProvider.implemations.ResetPasswordEmailProvider;
+import com.api.apibackend.shared.container.providers.MailProvider.implemations.AccountCreationNotificationMailProvider;
+import com.api.apibackend.shared.container.providers.MailProvider.implemations.ConfirmationMailProvider;
+import com.api.apibackend.shared.container.providers.MailProvider.implemations.ResetPasswordEmailProvider;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -29,7 +28,6 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-@Profile("dev")
 public class EmailSenderService implements IEmailSenderResetPassword {
     private JavaMailSender mailSender;
     private ResetPasswordEmailProvider resetPasswordEmailProvider;

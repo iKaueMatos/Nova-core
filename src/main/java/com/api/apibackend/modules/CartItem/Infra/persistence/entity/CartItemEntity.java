@@ -6,10 +6,11 @@
  * ----------------------------------------------------------------------------
  * Representa uma entidade de items dentro carrinho associados a um cliente.
  */
-
 package com.api.apibackend.modules.CartItem.Infra.persistence.entity;
 
 import java.io.Serializable;
+
+import org.springframework.context.annotation.Lazy;
 
 import com.api.apibackend.modules.Cart.Infra.persistence.entity.CartEntity;
 import com.api.apibackend.modules.Product.Infra.persistence.entity.ProductEntity;
@@ -22,26 +23,37 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.EqualsAndHashCode;
 
+@Lazy
 @Entity
 @Table(name = "item_carrinho")
+@EqualsAndHashCode(of = "idCartItem")
 public class CartItemEntity implements Serializable {
-
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idcarrinhoItem")
-    private Long id;
+    @Column(name = "id_carrinho_item")
+    private Long idCartItem;
 
+    /**
+     * entidade carrinho que se relaciona com carrinho item
+     */
     @ManyToOne
-    @JoinColumn(name = "idcarrinho")
+    @JoinColumn(name = "id_carrinho")
     private CartEntity cartEntity;
 
+    /*
+     * produtos que estão dentro do carrinho
+     */
     @ManyToOne
-    @JoinColumn(name = "idproduto")
+    @JoinColumn(name = "id_produto")
     private ProductEntity product;
 
+    /**
+     * quantidade de items que estão dentro do carrinho
+     */
     @Column(name = "quantidade")
     private int quantity;
 }

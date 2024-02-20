@@ -22,7 +22,6 @@ import jakarta.transaction.Transactional;
 
 @Service
 public class CustomerOrderService {
-
     private AnonymizationService anonymizationService;
 
     @Autowired
